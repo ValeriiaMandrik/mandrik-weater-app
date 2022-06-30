@@ -5,8 +5,111 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@1,200&family=Titillium+Web:wght@200&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    hello world
+    <div class="borders">
+      <div class="Cities">
+        <button class="current" id="currentCity">Current city</button>
+        <a class="city">Kyiv</a>
+        <a class="city">Sumy</a>
+        <a class="city">Cascais</a>
+        <a class="city">Lisbon</a>
+      </div>
+      <br />
+
+      <form class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="City"
+          aria-label="City"
+          aria-describedby="button-addon2"
+        />
+        <input class="search" type="submit" value="Search" />
+      </form>
+      <div class="container">
+        <div class="row">
+          <div class="col" id="dayValue">Day</div>
+        </div>
+        <div class="row">
+          <div class="col" id="cityValue">City</div>
+          <div class="col" id="sunrise">Sunrise</div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <span id="tempValue">Temperature</span>
+            <button class="celcius">°C</button>
+            <span>/</span>
+            <button class="farenheit">°F</button>
+          </div>
+          <div class="col" id="sunset">Sunset</div>
+        </div>
+      </div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Today</th>
+            <th scope="col">Tomorrow</th>
+            <th scope="col">Tomorrow+1</th>
+            <th scope="col">Tomorrow+2</th>
+            <th scope="col">Tomorrow+3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">High temperature</th>
+            <th scope="col">Today</th>
+            <th scope="col">Tomorrow</th>
+            <th scope="col">Tomorrow+1</th>
+            <th scope="col">Tomorrow+2</th>
+            <th scope="col">Tomorrow+3</th>
+          </tr>
+          <tr>
+            <th scope="row">Low temperature</th>
+            <th scope="col">Today</th>
+            <th scope="col">Tomorrow</th>
+            <th scope="col">Tomorrow+1</th>
+            <th scope="col">Tomorrow+2</th>
+            <th scope="col">Tomorrow+3</th>
+          </tr>
+          <tr>
+            <th scope="row">Wind km/h</th>
+            <th scope="col">Today</th>
+            <th scope="col">Tomorrow</th>
+            <th scope="col">Tomorrow+1</th>
+            <th scope="col">Tomorrow+2</th>
+            <th scope="col">Tomorrow+3</th>
+          </tr>
+          <tr>
+            <th scope="row">💦 mm</th>
+            <th scope="col">Today</th>
+            <th scope="col">Tomorrow</th>
+            <th scope="col">Tomorrow+1</th>
+            <th scope="col">Tomorrow+2</th>
+            <th scope="col">Tomorrow+3</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script src="src/index.js"></script>
   </body>
 </html>

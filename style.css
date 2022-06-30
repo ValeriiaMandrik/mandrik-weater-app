@@ -1,0 +1,54 @@
+.borders {
+  border: 2px solid #dfdfde;
+  max-width: 700px;
+  padding: 10px;
+  margin: 5px;
+  font-family: "Titillium Web", sans-serif;
+}
+.current {
+  background-color: white;
+  color: #6c757d;
+  border-radius: 0.375rem;
+  transition: all 200ms ease;
+  border: 1px solid #6c757d;
+  padding: 6px 12px;
+}
+.current:hover {
+  background-color: #6c757d;
+  color: white;
+  cursor: pointer;
+}
+.city {
+  padding-left: 60px;
+  color: #1c658c;
+  text-decoration: none;
+}
+
+.city:hover {
+  color: black;
+}
+.search {
+  background-color: white;
+  color: #6c757d;
+  border-radius: 0.375rem;
+  transition: all 200ms ease;
+  border: 1px solid #6c757d;
+  padding: 6px 12px;
+}
+.search:hover {
+  background-color: #6c757d;
+  color: white;
+  cursor: pointer;
+}
+.celcius,
+.farenheit {
+  background-color: white;
+  color: #6c757d;
+  transition: all 200ms ease;
+  border: none;
+}
+.celcius:hover,
+.farenheit:hover {
+  color: black;
+  text-decoration: underline;
+}
