@@ -18,12 +18,30 @@
   color: white;
   cursor: pointer;
 }
+
+.float-left {
+  margin: 0;
+  width: 100px;
+}
+.chosenCity {
+  color: #6c757d;
+  margin-left: 60px;
+  background-color: white;
+  border: none;
+}
+.chosenCity:hover {
+  color: black;
+  text-decoration: underline;
+}
 .city {
   padding-left: 60px;
   color: #1c658c;
   text-decoration: none;
 }
-
+#cityValue {
+  font-size: 36px;
+  font-weight: bolder;
+}
 .city:hover {
   color: black;
 }
