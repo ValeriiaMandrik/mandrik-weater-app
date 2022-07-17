@@ -6,15 +6,6 @@ let dateValue = document.querySelector("#dayValue");
 let tempValue = document.querySelector("#tempValue");
 let sunriseValue = document.querySelector("#sunrise");
 let sunsetValue = document.querySelector("#sunset");
-let date = document.querySelector("#date");
-let date1 = document.querySelector("#date1");
-let date2 = document.querySelector("#date2");
-let date3 = document.querySelector("#date3");
-let date4 = document.querySelector("#date4");
-let lowTempCol = document.querySelector("#lowTemp");
-let highTempCol = document.querySelector("#highTemp");
-let windCol = document.querySelector("#wind");
-let humiditCol = document.querySelector("#humidity");
 let currentCityButton = document.querySelector("#currentCity");
 let celciusButton = document.querySelector(".celcius");
 let farenheitButton = document.querySelector(".farenheit");
@@ -33,17 +24,12 @@ function capitalizeFirstLetter(cityName) {
 }
 
 //change date
-function updateDate(newDate, dateCol, dateCol1, dateCol2, dateCol3, dateCol4) {
+function updateDate(newDate) {
   dateValue.innerHTML = newDate;
-  date.innerHTML = dateCol;
-  date1.innerHTML = dateCol1;
-  date2.innerHTML = dateCol2;
-  date3.innerHTML = dateCol3;
-  date4.innerHTML = dateCol4;
 }
 
-function formatDate() {
-  let today = new Date();
+function formatDate(timestamp) {
+  let today = new Date(timestamp);
   let days = [
     "Sunday",
     "Monday",
@@ -53,46 +39,22 @@ function formatDate() {
     "Friday",
     "Saturday",
   ];
-  // if today.getDay()>2 {}
   let day = days[today.getDay()];
-  let day1 = days[today.getDay() + 1];
-  let day2 = days[today.getDay() + 2];
-  let day3 = days[today.getDay() + 3];
-  let day4 = days[today.getDay() + 4];
-  let hour = today.getHours();
-  if (hour < 10) {
-    hour = `0${hour}`;
+  let hours = today.getHours();
+  if (hours < 10) {
+    hours = `0${hours}`;
   }
-  let minute = today.getMinutes();
-  if (minute < 10) {
-    minute = `0${minute}`;
+  let minutes = today.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
   }
-  let date = `${day}, ${hour}:${minute}`;
-  updateDate(date, day, day1, day2, day3, day4);
+  let date = `${day}, ${hours}:${minutes}`;
+  return `${day} ${hours}:${minutes}`;
 }
+
 //change description
 function updateDescription(weatherDescription) {
   description.innerHTML = weatherDescription;
-}
-
-//change minTemp
-function updateMinTemp(minTemp) {
-  lowTempCol.innerHTML = Math.round(minTemp) + "°";
-}
-
-//change maxTemp
-function updateMaxTemp(maxTemp) {
-  highTempCol.innerHTML = Math.round(maxTemp) + "°";
-}
-
-//changeWind
-function updateWind(windspeed) {
-  windCol.innerHTML = windspeed;
-}
-
-//changeHumidity
-function updateHumidity(humidity) {
-  humiditCol.innerHTML = humidity;
 }
 
 //c
@@ -133,8 +95,6 @@ cityCascaisButton.addEventListener("click", getCity("Cascais"));
 //change city
 function updateCity(newcity) {
   cityValue.innerHTML = capitalizeFirstLetter(newcity);
-  temperature(newcity);
-  forecast(newcity);
 }
 
 function search(event) {
@@ -147,6 +107,58 @@ formSearch.addEventListener("submit", search);
 //change temperature
 function updateTemperature(newTemp) {
   tempValue.innerHTML = newTemp;
+}
+
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[day];
+}
+
+function displayForecast(response) {
+  let forecast = response.data.daily;
+  let date = formatDay(response.data.current.dt);
+  let forecastElement = document.querySelector("#forecast");
+  let forecastHTML = ` <tbody>
+<tr id "dateElement">
+<td scope="col">Date</td>
+<td scope="col">High temperature °C</td>
+<td scope="col">Low temperature °C</td>
+<td scope="col">Wind km/h</td>
+<td scope="col">Humidity, %</td>
+</tr>`;
+  forecast.forEach(function (forecastDay, index) {
+    if (index < 6) {
+      forecastHTML =
+        forecastHTML +
+        `    
+            <td scope="col">${formatDay(forecastDay.dt)}</td>
+       
+          <td scope="col" id="highTemp">${Math.round(
+            forecastDay.temp.max
+          )}° </td>
+       
+            <td scope="col" id="lowTemp">${Math.round(
+              forecastDay.temp.min
+            )}° </td>
+       
+          <td scope="col" id="wind">${forecastDay.wind_speed} </td>
+
+           <td scope="col" id="humidity">${forecastDay.humidity}</td>
+    
+`;
+
+      forecastHTML = forecastHTML + `</tbody>`;
+      forecastElement.innerHTML = forecastHTML;
+      updateDate(date);
+    }
+  });
+}
+function getForecast(coordinates) {
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayForecast);
 }
 
 function showTemperature(response) {
@@ -164,14 +176,12 @@ function showTemperature(response) {
     `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
   );
 
-  updateWind(windSpeed);
   updateTemperature(temperature);
-  updateMaxTemp(maxTemp);
-  updateMinTemp(minTemp);
-  updateHumidity(humidity);
   updateDescription(weatherDescription);
   changeTimeSunset(sunset, timeZone);
   changeTimeSunrise(sunrise, timeZone);
+
+  getForecast(response.data.coord);
 }
 function temperature(newCity) {
   let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${newCity}&appid=${apiKey}&units=${units}`;
@@ -182,11 +192,6 @@ function temperature(newCity) {
 
 function showWeather(response) {
   let temp = Math.round(response.data.main.temp);
-  console.log(response.data);
-  let minTemp = response.data.main.temp_min;
-  let maxTemp = response.data.main.temp_max;
-  let humidity = response.data.main.humidity;
-  let windSpeed = response.data.wind.speed;
   let cityName = response.data.name;
   let sunset = response.data.sys.sunset;
   let sunrise = response.data.sys.sunrise;
@@ -201,12 +206,9 @@ function showWeather(response) {
   updateCity(cityName);
   formatDate();
   updateTemperature(temp);
-  updateWind(windSpeed);
-  updateHumidity(humidity);
-  updateMaxTemp(maxTemp);
-  updateMinTemp(minTemp);
   changeTimeSunset(sunset, timeZone);
   changeTimeSunrise(sunrise, timeZone);
+  getForecast(response.data.coord);
 }
 
 function retrievePosition(position) {
@@ -238,7 +240,6 @@ function changeTimeSunset(sunset, timeZone) {
 function changeTimeSunrise(sunrise, timeZone) {
   let date = new Date().getTimezoneOffset();
   let newDate = new Date((sunrise + date * 60 + timeZone) * 1000);
-  console.log(date, timeZone);
   var hours = newDate.getHours();
   var minutes = "0" + newDate.getMinutes();
   var seconds = "0" + newDate.getSeconds();
@@ -247,14 +248,3 @@ function changeTimeSunrise(sunrise, timeZone) {
 
   sunriseValue.innerHTML = formattedTimeSunrise;
 }
-
-// //forNextDays
-// function showTemperatureForecast(response) {
-//   let date = response.data.list.dt_txt;
-//   console.log(date);
-// }
-// function forecast(newCity) {
-//   let apiUrlDayly = `https://api.openweathermap.org/data/2.5/forecast?q=${newCity}&appid=${apiKey}&units=${units}&mode=xml`;
-//   console.log(apiUrlDayly);
-//   axios.get(apiUrlDayly).then(showTemperatureForecast);
-// }
