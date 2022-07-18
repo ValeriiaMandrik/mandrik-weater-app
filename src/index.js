@@ -101,6 +101,7 @@ function search(event) {
   event.preventDefault();
   updateCity(input.value);
   formatDate();
+  temperature(input.value);
 }
 formSearch.addEventListener("submit", search);
 
